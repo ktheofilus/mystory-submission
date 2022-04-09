@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:clickable="true"
+        tools:context=".RegisterActivity">
+
+    <com.example.myapplication.customview.UsernameET
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/editTextName"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            android:hint="@string/name"/>
+
+    <com.example.myapplication.customview.EmailET
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/editTextEmail"
+            app:layout_constraintStart_toStartOf="@+id/editTextName"
+            app:layout_constraintEnd_toEndOf="@+id/editTextName"
+            android:hint="@string/email"
+            app:layout_constraintTop_toBottomOf="@+id/editTextName" android:layout_marginTop="4dp"/>
+
+    <com.example.myapplication.customview.PasswordET
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/editTextEmail"
+            app:layout_constraintStart_toStartOf="@+id/editTextEmail"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:id="@+id/editTextPassword" app:layout_constraintHorizontal_bias="0.436"
+            app:layout_constraintTop_toBottomOf="@+id/editTextEmail" android:layout_marginTop="4dp"
+            android:hint="@string/password"/>
+
+    <Button
+            android:text="@string/register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/registerButton"
+            android:ems="8"
+            app:layout_constraintStart_toStartOf="@+id/editTextPassword"
+            app:layout_constraintTop_toBottomOf="@+id/editTextPassword" android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="@+id/editTextPassword"/>
+    <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

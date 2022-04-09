@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="error_empty" translatable="false">Kolom ini tidak boleh kosong</string>
+    <string name="error_passwordLength" translatable="false">Panjang minimum password adalah 6</string>
+
+
+    <string name="app_name" translatable="false">My Story</string>
+    <string name="email" translatable="false">E-mail</string>
+    <string name="password" translatable="false">Kata Sandi</string>
+    <string name="login" translatable="false">Masuk</string>
+    <string name="register" translatable="false">Daftar</string>
+    <string name="name" translatable="false">Nama</string>
+    <string name="photodesc" translatable="false">Deskripsi</string>
+    <string name="photoname" translatable="false">
+        <b>Nama</b>
+    </string>
+    <string name="logout">Keluar</string>
+    <string name="addphoto">Tambah Foto</string>
+    <string name="upload">Unggah</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Gallery</string>
+    <string name="desc">Deskripsi</string>
+    <string name="no_permission">Tidak ada izin</string>
+    <string name="failed_camera">Gagal keluncurkan kamera</string>
+    <string name="cameraSnap">Mengambil gambar</string>
+    <string name="cameraFlip">Putar kamera</string>
+    <string name="error_invalidEmail">Format E-mail salah</string>
+    <string name="changeLanguange">Ganti bahasa</string>
+    <string name="english">Inggris</string>
+    <string name="indonesia">Indonesia</string>
+
+
+</resources>

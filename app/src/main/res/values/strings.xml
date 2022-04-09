@@ -1,0 +1,30 @@
+<resources>
+
+    <string name="error_empty">This field cannot be blank</string>
+    <string name="error_passwordLength">Minimum password length is 6</string>
+
+
+    <string name="app_name">My Story</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="name">Name</string>
+    <string name="photodesc">Desc</string>
+    <string name="photoname">Photo Name</string>
+    <string name="logout">Log Out</string>
+    <string name="addphoto">Add Photo</string>
+    <string name="upload">Upload</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="desc">Description</string>
+    <string name="no_permission">No Permission</string>
+    <string name="failed_camera">Failed to launch camera</string>
+    <string name="cameraSnap">Camera Snapshot</string>
+    <string name="cameraFlip">Flip Camera</string>
+    <string name="error_invalidEmail">Email is invalid</string>
+    <string name="changeLanguange">Change Languange</string>
+    <string name="english">English</string>
+    <string name="indonesia">Indonesia</string>
+
+</resources>
