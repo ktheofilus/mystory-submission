@@ -9,8 +9,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.api.*
-import com.example.myapplication.di.DataStoreDI.dataStore
-import com.example.myapplication.di.DataStoreDI.logged
+import com.example.myapplication.di.AppModule.dataStore
+import com.example.myapplication.di.AppModule.logged
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch

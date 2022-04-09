@@ -1,5 +1,7 @@
 package com.example.myapplication.api
 
+import com.example.myapplication.BuildConfig
+import com.example.myapplication.BuildConfig.DICODING_ENDPOINT
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -15,7 +17,7 @@ class ApiConfig {
                 .addInterceptor(loggingInterceptor)
                 .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://story-api.dicoding.dev/")
+                .baseUrl(DICODING_ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()

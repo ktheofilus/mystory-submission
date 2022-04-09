@@ -17,7 +17,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.example.myapplication.databinding.ActivityCameraBinding
-import com.example.myapplication.utils.createFile
+import com.example.myapplication.utils.Utilities.createFile
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService

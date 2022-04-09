@@ -26,5 +26,6 @@
     <string name="changeLanguange">Change Languange</string>
     <string name="english">English</string>
     <string name="indonesia">Indonesia</string>
+    <string name="retry">Retry</string>
 
 </resources>

@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 data class ListStoryResponse(
 
 	@field:SerializedName("listStory")
-	val listStory: List<ListStoryItem?>? = null,
+	val listStory: List<ListStoryItem>,
 
 	@field:SerializedName("error")
 	val error: Boolean? = null,

@@ -17,8 +17,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.myapplication.databinding.ActivityUploadBinding
-import com.example.myapplication.utils.rotateBitmap
-import com.example.myapplication.utils.uriToFile
+import com.example.myapplication.utils.Utilities.rotateBitmap
+import com.example.myapplication.utils.Utilities.uriToFile
 import com.example.myapplication.viewmodel.UploadViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +28,7 @@ import java.io.*
 class UploadActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityUploadBinding
-    private lateinit var model: UploadViewModel
+    private val model: UploadViewModel by viewModels()
 
     private var getFile: File? = null
 
@@ -43,10 +43,6 @@ class UploadActivity : AppCompatActivity() {
         binding.progressBar2.visibility = View.INVISIBLE
 
         binding.uploadButton.isEnabled=false
-
-
-        val modelVW: UploadViewModel by viewModels()
-        model=modelVW
 
         model.isLoading.observe(this){
             model.showLoading(binding.progressBar2)

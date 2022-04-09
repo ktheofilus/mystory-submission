@@ -9,8 +9,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myapplication.api.ActionResponse
 import com.example.myapplication.api.ApiConfig
-import com.example.myapplication.di.DataStoreDI
-import com.example.myapplication.di.DataStoreDI.dataStore
+import com.example.myapplication.di.AppModule
+import com.example.myapplication.di.AppModule.dataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
@@ -26,9 +26,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import javax.inject.Inject
-
-
-
 
 @HiltViewModel
 class UploadViewModel  @Inject constructor(
@@ -66,7 +63,7 @@ class UploadViewModel  @Inject constructor(
             file.name,
             requestImageFile
         )
-        val loginToken = runBlocking { dataStore.data.first() }[DataStoreDI.logged]
+        val loginToken = runBlocking { dataStore.data.first() }[AppModule.logged]
 
         _isLoading.value=true
         val client = ApiConfig.getApiService().uploadImage("Bearer $loginToken",imageMultipart, description)

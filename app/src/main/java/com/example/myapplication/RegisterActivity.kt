@@ -14,7 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityRegisterBinding
-    private lateinit var model: RegisterViewModel
+    private val model: RegisterViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,9 +24,6 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.progressBar.visibility = View.INVISIBLE
-
-        val viewModel: RegisterViewModel by viewModels()
-        model=viewModel
 
         model.isLoading.observe(this){
             model.showLoading(binding.progressBar)

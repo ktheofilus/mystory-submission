@@ -19,11 +19,16 @@ interface ApiService {
     ):Call<LoginResponse>
 
     @GET("/v1/stories")
-    fun getStories(
-        @Header("Authorization") token: String?,
-        @Query("page") page: Int?,
-        @Query("size") size: Int?
-    ):ListStoryResponse
+    suspend fun getStories(
+        @Header("Authorization") token: String,
+        @Query("page") page :Int,
+        @Query("size") size :Int
+    ): ListStoryResponse
+
+    @GET("/v1/stories")
+    suspend fun getStoriesLocation(
+        @Header("Authorization") token: String,
+    ): Call<ListStoryResponse>
 
     @Multipart
     @POST("/v1/stories")

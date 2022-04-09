@@ -6,81 +6,26 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.myapplication.api.*
-import com.example.myapplication.di.DataStoreDI
-import com.example.myapplication.di.DataStoreDI.dataStore
+import com.example.myapplication.data.StoryRepository
+import com.example.myapplication.di.AppModule
+import com.example.myapplication.di.AppModule.dataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
-import com.example.myapplication.di.Injection.provideRepository
-import androidx.paging.cachedIn
-
-
 
 @HiltViewModel
 class StoryListViewModel  @Inject constructor(
-    @ApplicationContext context: Context
+    private val storyRepository: StoryRepository
 ):ViewModel(){
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
+    var storyItem: LiveData<PagingData<ListStoryItem>> =
+        storyRepository.getStory().cachedIn(viewModelScope)
 
-    private val _message = MutableLiveData<String>()
-    val message: LiveData<String> = _message
-
-    private val _stories = MutableLiveData<List<ListStoryItem?>?>()
-    val stories: LiveData<List<ListStoryItem?>?> = _stories
-
-    private val dataStore = context.dataStore
-
-//    @Inject
-//    val storyRepository = provideRepository(context)
-//
-//
-//    val storyItem: LiveData<PagingData<ListStoryItem>> =
-//        storyRepository.getStory().cachedIn(viewModelScope)
-
-    fun getStory(){
-        _isLoading.value=true
-        val loginToken = runBlocking { dataStore.data.first() }[DataStoreDI.logged]
-        val client = ApiConfig.getApiService().getStories("Bearer $loginToken",5,5)
-        client.enqueue(object : Callback<ListStoryResponse> {
-            override fun onResponse(
-                call: Call<ListStoryResponse>,
-                response: Response<ListStoryResponse>
-            ) {
-                if (response.isSuccessful) {
-
-                    val story : ListStoryResponse? = response.body()
-
-                    _stories.value = story?.listStory
-                }
-                else{
-
-                    val error = response.errorBody()?.string()
-                    val jsonObject = JSONObject(error)
-                    val errormessage= jsonObject.get("message")
-                    _message.value=errormessage.toString()
-                }
-                _isLoading.value=false
-            }
-            override fun onFailure(call: Call<ListStoryResponse>, t: Throwable) {
-                _isLoading.value = false
-                _message.value = t.message.toString()
-            }
-        })
-    }
-
-    fun showLoading(progressBar:SwipeRefreshLayout){
-        progressBar.isRefreshing = isLoading.value == true
-    }
 
 }
 

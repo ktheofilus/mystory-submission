@@ -10,8 +10,8 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.databinding.ActivityMainBinding
-import com.example.myapplication.di.DataStoreDI.dataStore
-import com.example.myapplication.di.DataStoreDI.logged
+import com.example.myapplication.di.AppModule.dataStore
+import com.example.myapplication.di.AppModule.logged
 import com.example.myapplication.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +22,7 @@ import kotlinx.coroutines.runBlocking
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var mainViewModel: MainViewModel
+    private val model: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,14 +32,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.progressBar.visibility = View.INVISIBLE
 
-        val model: MainViewModel by viewModels()
-        mainViewModel=model
 
-        mainViewModel.isLoading.observe(this){
-            mainViewModel.showLoading(binding.progressBar)
+        model.isLoading.observe(this){
+            model.showLoading(binding.progressBar)
         }
 
-        mainViewModel.isLogged.observe(this){isLogged->
+        model.isLogged.observe(this){isLogged->
             if (isLogged){
                 val storyListActivity = Intent(this@MainActivity, StoryListActivity::class.java)
                 startActivity(storyListActivity)
@@ -47,7 +45,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        mainViewModel.message.observe(this){message->
+        model.message.observe(this){message->
             Snackbar.make(
                 binding.root,
                 message,
@@ -61,7 +59,6 @@ class MainActivity : AppCompatActivity() {
         var isEmailCorrect = false
         var isPasswordCorrect = false
 
-//        checkButton(false,false)
         binding.loginButton.isEnabled = false
 
 
@@ -100,7 +97,7 @@ class MainActivity : AppCompatActivity() {
             val username = binding.editTextEmail.text.toString()
             val pw = binding.editTextPassword.text.toString()
 
-            mainViewModel.login(username,pw)
+            model.login(username,pw)
 
         }
 
@@ -116,9 +113,7 @@ class MainActivity : AppCompatActivity() {
 
      private fun isLoggedIn(){
 
-        Log.d("TAG", "isLogged before token")
         val loginToken = runBlocking { dataStore.data.first()[logged]}
-        Log.d("TAG", "isLogged after token: $loginToken")
 
         if(loginToken!=null) if (loginToken!=""){
             val storyListActivity = Intent(this@MainActivity, StoryListActivity::class.java)

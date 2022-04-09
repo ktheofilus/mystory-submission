@@ -1,28 +1,32 @@
 package com.example.myapplication
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.core.edit
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.example.myapplication.databinding.ActivityStoryListBinding
-import com.example.myapplication.di.DataStoreDI
-import com.example.myapplication.di.DataStoreDI.dataStore
+import com.example.myapplication.di.AppModule
+import com.example.myapplication.di.AppModule.dataStore
+import com.example.myapplication.recyclerview.LoadingStateAdapter
 import com.example.myapplication.recyclerview.StoryAdapter
 import com.example.myapplication.viewmodel.StoryListViewModel
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
+
 
 @AndroidEntryPoint
 class StoryListActivity : AppCompatActivity() {
 
-    private lateinit var model: StoryListViewModel
+    private val  model: StoryListViewModel by viewModels()
     private lateinit var binding: ActivityStoryListBinding
+    private lateinit var adapter:StoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,35 +34,24 @@ class StoryListActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        binding.swiperefresh.isRefreshing=true
+
+        adapter = StoryAdapter()
+
+
         binding.swiperefresh.setOnRefreshListener {
-            model.getStory()
+            adapter.refresh()
+
         }
 
-        val storyViewModel: StoryListViewModel by viewModels()
+        getData()
 
-        model=storyViewModel
-
-        model.getStory()
-
-        model.isLoading.observe(this){
-            model.showLoading(binding.swiperefresh)
-        }
-
-        model.message.observe(this){
-            Snackbar.make(
-                binding.root,
-                it,
-                Snackbar.LENGTH_SHORT
-            ).show()
-        }
-
-
-        model.stories.observe(this){
-
-            binding.rvStory.layoutManager = LinearLayoutManager(this)
-            val listStoryItem = StoryAdapter(it)
-            binding.rvStory.adapter = listStoryItem
-        }
+        adapter.registerAdapterDataObserver(object : AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                val totalNumberOfItems = adapter.itemCount
+                binding.swiperefresh.isRefreshing = totalNumberOfItems == 0
+            }
+        })
 
     }
 
@@ -78,14 +71,6 @@ class StoryListActivity : AppCompatActivity() {
                 val uploadIntent = Intent(this@StoryListActivity, UploadActivity::class.java)
                 uploadLauncher.launch(uploadIntent)
 
-
-                true
-            }
-            R.id.map -> {
-                val mapIntent = Intent(this@StoryListActivity, MapsActivity::class.java)
-                startActivity(mapIntent)
-
-
                 true
             }
 
@@ -93,18 +78,35 @@ class StoryListActivity : AppCompatActivity() {
         }
     }
 
+    private fun getData() {
+        binding.rvStory.layoutManager = LinearLayoutManager(this)
+        binding.rvStory.adapter = adapter
+
+        binding.rvStory.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter{adapter.retry()}
+        )
+
+        model.storyItem.observe(this) {pagingData->
+            Log.d("TAG", "getData: observed")
+            adapter.submitData(lifecycle, pagingData)
+
+        }
+
+    }
+
     private val uploadLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == UploadActivity.RESULT_CODE) {
-            model.getStory()
+            adapter.refresh()
+            binding.rvStory.invalidate()
         }
     }
 
     private fun logOut(){
         runBlocking {
             dataStore.edit { token ->
-                token[DataStoreDI.logged]=""
+                token[AppModule.logged]=""
             }
         }
         val loginActivity = Intent(this@StoryListActivity, MainActivity::class.java)
@@ -112,11 +114,6 @@ class StoryListActivity : AppCompatActivity() {
         finish()
     }
 
-
-
-//    override fun onResume() {
-//        super.onResume()
-//        model.getStory()
-//    }
-
 }
+
+

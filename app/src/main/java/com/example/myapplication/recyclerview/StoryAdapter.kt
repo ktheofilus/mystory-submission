@@ -2,6 +2,7 @@ package com.example.myapplication.recyclerview
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
@@ -12,8 +13,10 @@ import com.example.myapplication.DetailActivity
 import com.example.myapplication.api.ListStoryItem
 import com.example.myapplication.databinding.ItemRowStoryBinding
 import androidx.core.util.Pair
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 
-class StoryAdapter(private val listStory: List<ListStoryItem?>?) : RecyclerView.Adapter<StoryAdapter.ListViewHolder>() {
+class StoryAdapter: PagingDataAdapter<ListStoryItem, StoryAdapter.ListViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var circularProgressDrawable :CircularProgressDrawable
 
@@ -26,8 +29,7 @@ class StoryAdapter(private val listStory: List<ListStoryItem?>?) : RecyclerView.
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val item = listStory?.get(position)
-
+        val item = getItem(position)
 
         circularProgressDrawable.strokeWidth = 5f
         circularProgressDrawable.centerRadius = 30f
@@ -60,9 +62,18 @@ class StoryAdapter(private val listStory: List<ListStoryItem?>?) : RecyclerView.
 
     }
 
-    override fun getItemCount(): Int = listStory?.size!!
-
     class ListViewHolder(var binding: ItemRowStoryBinding) : RecyclerView.ViewHolder(binding.root)
 
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
+            override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
+                return oldItem.id == newItem.id
+            }
+        }
+    }
 
 }
