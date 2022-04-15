@@ -81,6 +81,13 @@ class StoryListActivity : AppCompatActivity() {
 
                 true
             }
+            R.id.map -> {
+                val mapIntent = Intent(this@StoryListActivity, MapsActivity::class.java)
+                startActivity(mapIntent)
+
+
+                true
+            }
 
             else -> true
         }

@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.myapplication.api.*
 import com.example.myapplication.di.DataStoreDI
@@ -17,6 +19,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
+import com.example.myapplication.di.Injection.provideRepository
+import androidx.paging.cachedIn
+
+
 
 @HiltViewModel
 class StoryListViewModel  @Inject constructor(
@@ -34,10 +40,17 @@ class StoryListViewModel  @Inject constructor(
 
     private val dataStore = context.dataStore
 
+//    @Inject
+//    val storyRepository = provideRepository(context)
+//
+//
+//    val storyItem: LiveData<PagingData<ListStoryItem>> =
+//        storyRepository.getStory().cachedIn(viewModelScope)
+
     fun getStory(){
         _isLoading.value=true
         val loginToken = runBlocking { dataStore.data.first() }[DataStoreDI.logged]
-        val client = ApiConfig.getApiService().getStories("Bearer $loginToken")
+        val client = ApiConfig.getApiService().getStories("Bearer $loginToken",5,5)
         client.enqueue(object : Callback<ListStoryResponse> {
             override fun onResponse(
                 call: Call<ListStoryResponse>,
