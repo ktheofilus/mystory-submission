@@ -48,14 +48,15 @@ class UploadViewModel  @Inject constructor(
     }
 
 
-    fun upload(file: File,desc:String) {
+    fun upload(file: File,desc:String,lat:Double?,lon:Double?) {
 
         _isUploaded.value=false
 
         Log.d("TAG", "upload: ${_isUploaded.value}")
 
-
         val description = desc.toRequestBody("text/plain".toMediaType())
+        val latitude = lat.toString().toRequestBody("text/plain".toMediaType())
+        val lonngitude = lon.toString().toRequestBody("text/plain".toMediaType())
 
         val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
@@ -66,7 +67,7 @@ class UploadViewModel  @Inject constructor(
         val loginToken = runBlocking { dataStore.data.first() }[AppModule.logged]
 
         _isLoading.value=true
-        val client = ApiConfig.getApiService().uploadImage("Bearer $loginToken",imageMultipart, description)
+        val client = ApiConfig.getApiService().uploadImage("Bearer $loginToken",imageMultipart, description,latitude,lonngitude)
         client.enqueue(object : Callback<ActionResponse> {
             override fun onResponse(
                 call: Call<ActionResponse>,

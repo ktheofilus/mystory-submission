@@ -1,14 +1,18 @@
 package com.example.myapplication
 
-import android .Manifest
+import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,9 +24,14 @@ import com.example.myapplication.databinding.ActivityUploadBinding
 import com.example.myapplication.utils.Utilities.rotateBitmap
 import com.example.myapplication.utils.Utilities.uriToFile
 import com.example.myapplication.viewmodel.UploadViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationListener
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.*
+import java.io.File
+
 
 @AndroidEntryPoint
 class UploadActivity : AppCompatActivity() {
@@ -34,6 +43,9 @@ class UploadActivity : AppCompatActivity() {
 
     private var descExist = false
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var loc:Location
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -43,6 +55,8 @@ class UploadActivity : AppCompatActivity() {
         binding.progressBar2.visibility = View.INVISIBLE
 
         binding.uploadButton.isEnabled=false
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         model.isLoading.observe(this){
             model.showLoading(binding.progressBar2)
@@ -64,6 +78,7 @@ class UploadActivity : AppCompatActivity() {
             }
         }
 
+
         if (!this.allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
                 this,
@@ -71,6 +86,7 @@ class UploadActivity : AppCompatActivity() {
                 UploadActivity.REQUEST_CODE_PERMISSIONS
             )
         }
+
 
 
         binding.descEditTextTextMultiLine.addTextChangedListener(object : TextWatcher {
@@ -85,6 +101,8 @@ class UploadActivity : AppCompatActivity() {
             }
 
         })
+
+        getMyLastLocation()
 
         binding.cameraXButton.setOnClickListener { startCameraX() }
         binding.galleryButton.setOnClickListener { startGallery() }
@@ -112,6 +130,13 @@ class UploadActivity : AppCompatActivity() {
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun checkLocationPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun startCameraX() {
@@ -144,7 +169,8 @@ class UploadActivity : AppCompatActivity() {
 
         if (getFile != null) {
             val desc = binding.descEditTextTextMultiLine.text.toString()
-            model.upload(getFile!!,desc)
+            getMyLastLocation()
+            model.upload(getFile!!,desc,loc.latitude,loc.longitude)
         }
 
     }
@@ -175,12 +201,42 @@ class UploadActivity : AppCompatActivity() {
 
     }
 
+    private fun getMyLastLocation() {
+
+        if (checkLocationPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
+            checkLocationPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        ) {
+            Log.d("TAG", "getMyLastLocation: fusedlocation")
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                Log.d("TAG", "getMyLastLocation: $location")
+                if (location != null) {
+                    loc=location
+                } else {
+                    Toast.makeText(
+                        this@UploadActivity,
+                        R.string.no_location,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+
+
     companion object {
         const val CAMERA_X_RESULT = 200
         const val RESULT_CODE = 110
-
-         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private val REQUIRED_PERMISSIONS = arrayOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION)
         private const val REQUEST_CODE_PERMISSIONS = 10
     }
+
+
+
+
+
+
 
 }

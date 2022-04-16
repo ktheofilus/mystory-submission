@@ -1,5 +1,6 @@
 package com.example.myapplication.api
 
+import android.location.Location
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -7,35 +8,38 @@ import retrofit2.http.*
 
 interface ApiService {
 
-    @POST("/v1/register")
+    @POST("register")
     fun register(
         @Body register: Register
         ):Call<ActionResponse>
 
 
-    @POST("/v1/login")
+    @POST("login")
     fun login(
         @Body login: Login
     ):Call<LoginResponse>
 
-    @GET("/v1/stories")
+    @GET("stories")
     suspend fun getStories(
         @Header("Authorization") token: String,
         @Query("page") page :Int,
         @Query("size") size :Int
     ): ListStoryResponse
 
-    @GET("/v1/stories")
-    suspend fun getStoriesLocation(
+    @GET("stories")
+    fun getStoriesLocation(
         @Header("Authorization") token: String,
-    ): Call<ListStoryResponse>
+        @Query("location") location: Int
+    ): Call<ListStoryResponseLocation>
 
     @Multipart
-    @POST("/v1/stories")
+    @POST("stories")
     fun uploadImage(
         @Header("Authorization") token: String?,
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody,
+        @Part("lat") lat: RequestBody?,
+        @Part("lon") lon: RequestBody?,
     ): Call<ActionResponse>
 
 

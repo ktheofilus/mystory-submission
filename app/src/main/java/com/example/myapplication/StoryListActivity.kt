@@ -41,7 +41,6 @@ class StoryListActivity : AppCompatActivity() {
 
         binding.swiperefresh.setOnRefreshListener {
             adapter.refresh()
-
         }
 
         getData()
@@ -73,7 +72,11 @@ class StoryListActivity : AppCompatActivity() {
 
                 true
             }
-
+            R.id.mapButton -> {
+                val mapIntent = Intent(this@StoryListActivity, MapsActivity::class.java)
+                startActivity(mapIntent)
+                true
+            }
             else -> true
         }
     }

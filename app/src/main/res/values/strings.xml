@@ -27,5 +27,9 @@
     <string name="english">English</string>
     <string name="indonesia">Indonesia</string>
     <string name="retry">Retry</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="map">Map</string>
+    <string name="yes_permission">Permission Granted</string>
+    <string name="no_location">Location not found</string>
 
 </resources>

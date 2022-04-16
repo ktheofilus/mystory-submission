@@ -18,7 +18,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField 'String', 'DICODING_ENDPOINT','"https://story-api.dicoding.dev/"'
+        buildConfigField 'String', 'DICODING_ENDPOINT','"https://story-api.dicoding.dev/v1/"'
     }
 
     buildTypes {
@@ -66,6 +66,7 @@ dependencies {
     kapt 'com.google.dagger:hilt-android-compiler:2.41'
 
     implementation 'com.github.bumptech.glide:glide:4.13.1'
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
@@ -81,5 +82,7 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:3.1.1"
     implementation 'androidx.room:room-paging:2.5.0-alpha01'
 
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 
 }
