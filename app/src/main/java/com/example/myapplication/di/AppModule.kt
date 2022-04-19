@@ -6,8 +6,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.myapplication.api.ApiConfig
-import com.example.myapplication.data.StoryRepository
 import com.example.myapplication.database.StoryDb
+import com.example.myapplication.repository.StoryRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

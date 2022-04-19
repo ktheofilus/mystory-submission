@@ -4,17 +4,19 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -24,13 +26,13 @@ import com.example.myapplication.databinding.ActivityUploadBinding
 import com.example.myapplication.utils.Utilities.rotateBitmap
 import com.example.myapplication.utils.Utilities.uriToFile
 import com.example.myapplication.viewmodel.UploadViewModel
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationListener
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
@@ -45,6 +47,8 @@ class UploadActivity : AppCompatActivity() {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var loc:Location
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallback: LocationCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,12 +106,75 @@ class UploadActivity : AppCompatActivity() {
 
         })
 
-        getMyLastLocation()
+        createLocationRequest()
+        createLocationCallback()
+        startLocationUpdates()
 
         binding.cameraXButton.setOnClickListener { startCameraX() }
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.uploadButton.setOnClickListener { uploadImage() }
     }
+
+    private fun createLocationCallback() {
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+
+            }
+        }
+    }
+
+    private fun startLocationUpdates() {
+        try {
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+        } catch (exception: SecurityException) {
+        }
+    }
+
+    private fun createLocationRequest() {
+        locationRequest = LocationRequest.create().apply {
+            interval = TimeUnit.SECONDS.toMillis(1)
+            maxWaitTime = TimeUnit.SECONDS.toMillis(1)
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+        val client = LocationServices.getSettingsClient(this)
+        client.checkLocationSettings(builder.build())
+            .addOnSuccessListener {
+                getMyLastLocation()
+            }
+            .addOnFailureListener { exception ->
+                if (exception is ResolvableApiException) {
+                    try {
+                        resolutionLauncher.launch(
+                            IntentSenderRequest.Builder(exception.resolution).build()
+                        )
+                    } catch (sendEx: IntentSender.SendIntentException) {
+                        Toast.makeText(this@UploadActivity, sendEx.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+    }
+
+    private val resolutionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartIntentSenderForResult()
+        ) { result ->
+            when (result.resultCode) {
+                RESULT_OK ->
+                    Toast.makeText(this@UploadActivity, getString(R.string.yes_permission), Toast.LENGTH_SHORT).show()
+                RESULT_CANCELED ->
+                    Toast.makeText(
+                        this@UploadActivity,
+                        getString(R.string.no_permission),
+                        Toast.LENGTH_SHORT
+                    ).show()
+            }
+        }
 
 
     override fun onRequestPermissionsResult(
@@ -124,8 +191,16 @@ class UploadActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
                 finish()
+            }else{
+                createLocationRequest()
+                createLocationCallback()
+                startLocationUpdates()
             }
         }
+    }
+
+    private fun stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -206,22 +281,18 @@ class UploadActivity : AppCompatActivity() {
         if (checkLocationPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
             checkLocationPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
         ) {
-            Log.d("TAG", "getMyLastLocation: fusedlocation")
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                Log.d("TAG", "getMyLastLocation: $location")
                 if (location != null) {
                     loc=location
-                } else {
-                    Toast.makeText(
-                        this@UploadActivity,
-                        R.string.no_location,
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             }
         }
     }
 
+    override fun onDestroy() {
+        stopLocationUpdates()
+        super.onDestroy()
+    }
 
     companion object {
         const val CAMERA_X_RESULT = 200
@@ -232,11 +303,5 @@ class UploadActivity : AppCompatActivity() {
             Manifest.permission.ACCESS_COARSE_LOCATION)
         private const val REQUEST_CODE_PERMISSIONS = 10
     }
-
-
-
-
-
-
 
 }

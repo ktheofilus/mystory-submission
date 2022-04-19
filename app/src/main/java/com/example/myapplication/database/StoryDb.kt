@@ -5,9 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.myapplication.api.ListStoryItem
+import com.example.myapplication.data.RemoteKeys
+import com.example.myapplication.data.RemoteKeysDao
+import com.example.myapplication.repository.StoryDao
 
 @Database(
-    entities = [ListStoryItem::class,RemoteKeys::class],
+    entities = [ListStoryItem::class, RemoteKeys::class],
     version = 2,
     exportSchema = false
 )

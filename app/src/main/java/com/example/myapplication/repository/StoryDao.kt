@@ -9,7 +9,6 @@ import com.example.myapplication.api.ListStoryItem
 
 @Dao
 interface StoryDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStory(story: List<ListStoryItem?>?)
 
@@ -18,5 +17,4 @@ interface StoryDao {
 
     @Query("DELETE FROM story")
     suspend fun deleteAll()
-
 }

@@ -1,28 +1,18 @@
 package com.example.myapplication.data
 
 import android.content.Context
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.LoadState.Loading.endOfPaginationReached
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.example.myapplication.api.ApiService
 import com.example.myapplication.api.ListStoryItem
-import com.example.myapplication.api.ListStoryResponse
-import com.example.myapplication.database.RemoteKeys
 import com.example.myapplication.database.StoryDb
-import com.example.myapplication.di.AppModule
 import com.example.myapplication.di.AppModule.dataStore
 import com.example.myapplication.di.AppModule.logged
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 @OptIn(ExperimentalPagingApi::class)
 class StoryRemoteMediator(private val database: StoryDb,
