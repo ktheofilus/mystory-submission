@@ -30,8 +30,6 @@ MapViewModelTest
         mengembalikan pesan "Bad HTTP authentication header format".
 
 
-
-
 RegisterViewModelTest
 *note pengecekan apakah ada fill yang harus diisi / email benar / password <6 sudah ada di ui jadi tidak di test ulang
 
@@ -49,6 +47,8 @@ StoryListViewModelTest
 
     ketika mengambil data
         data tidak null.
+        besar data yang diambil sama
+        item pertama data sama
 
 
 UploadViewModelTest
@@ -64,4 +64,16 @@ UploadViewModelTest
         mengembalikan pesan "Bad HTTP authentication header format".
         data pesan tidak null.
 
+StoryListActivityTest
+    ketika mengambil data
+        menggunakan data dummy 
+        mengecek apakah recyclerview tampil
+        mengecek apakah item pertama sama seperti data dummy
+        mengecek apakah item terakhir sama seperti data dummy
 
+
+StoryRepositoryTest
+    menggunakan data dummy 
+    test dilakukan dengan melakukan pemanggilan getStories
+    mengecek apakah item pertama sama seperti data dummy
+    mengecek apakah item terakhir sama seperti data dummy

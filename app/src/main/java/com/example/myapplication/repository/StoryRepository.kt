@@ -12,7 +12,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 class StoryRepository(private val storyDb: StoryDb, private val apiService: ApiService, @ApplicationContext context: Context) {
 
     val context = context
-    var api = apiService
 
     fun getStory(): LiveData<PagingData<ListStoryItem>> {
         @OptIn(ExperimentalPagingApi::class)
@@ -20,14 +19,11 @@ class StoryRepository(private val storyDb: StoryDb, private val apiService: ApiS
             config = PagingConfig(
                 pageSize = 5
             ),
-            remoteMediator = StoryRemoteMediator(storyDb, api,context),
+            remoteMediator = StoryRemoteMediator(storyDb, apiService,context),
             pagingSourceFactory = {
                 storyDb.storyDao().getAllStory()
             }
         ).liveData
     }
 
-    suspend fun delete() {
-        storyDb.storyDao().deleteAll()
-    }
 }

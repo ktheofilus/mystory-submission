@@ -22,7 +22,6 @@ object ApiConfig {
 
     val client = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
-        .addInterceptor(DomainInterceptor())
         .build()
 
     val retrofit by lazy { Retrofit.Builder()
@@ -34,22 +33,5 @@ object ApiConfig {
     fun getApiService(): ApiService = retrofit.create(ApiService::class.java)
 }
 
-class DomainInterceptor : Interceptor {
-
-    @Throws(Exception::class)
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-        return chain.proceed(
-            request.newBuilder()
-                .url(
-                    request.url.toString()
-                        .replace(DICODING_ENDPOINT, baseUrl)
-                        .toHttpUrlOrNull() ?: request.url
-                )
-                .build()
-        )
-    }
-
-}
 
 

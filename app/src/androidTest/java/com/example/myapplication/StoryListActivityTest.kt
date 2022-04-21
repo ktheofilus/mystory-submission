@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -35,9 +36,6 @@ class StoryListActivityTest{
 
     private val mockWebServer = MockWebServer()
 
-    @get:Rule
-    var activity = ActivityScenarioRule(StoryListActivity::class.java)
-
     @Before
     fun setUp() {
         mockWebServer.start(8080)
@@ -53,6 +51,7 @@ class StoryListActivityTest{
 
     @Test
     fun getStories_Success() {
+        ActivityScenario.launch(StoryListActivity::class.java)
 
         val mockResponse = MockResponse()
             .setResponseCode(200)
@@ -73,7 +72,6 @@ class StoryListActivityTest{
                     )
                 )
         }
-
     }
 
 }
