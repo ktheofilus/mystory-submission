@@ -1,0 +1,67 @@
+MainViewModelTest 
+*note pengecekan apakah email benar / password <6 sudah ada di ui jadi tidak di test ulang
+    
+    ketika memasukan password salah.
+        data pesan tidak null.
+        mengembalikan pesan "Invalid password".
+    
+    ketika login Success
+        mengembalikan data logged.
+        data pesan tidak null.
+
+    ketika user tidak ditemukan / email tidak terdaftar
+        menggunakan email dummy random untuk mendaftar.
+        data pesan tidak null.
+        mengembalikan pesan "User not found".
+
+    cek apakah loading berjalan
+        memanggil login acak
+        data loading tidak null
+
+
+MapViewModelTest
+    ketika mengambil data story
+        menggunakan auth
+        data story tidak null
+    
+    ketika gagal mengambil data
+        menghapus auth
+        data pesan tidak null.
+        mengembalikan pesan "Bad HTTP authentication header format".
+
+
+
+
+RegisterViewModelTest
+*note pengecekan apakah ada fill yang harus diisi / email benar / password <6 sudah ada di ui jadi tidak di test ulang
+
+    ketika register Success
+        menggunakan email dummy random untuk mendaftar.
+        data pesan tidak null.
+        mengembalikan pesan "User created".
+
+    ketika register dengan email sama
+        menggunakan email "test@gmail.com" untuk mendaftar.
+        data pesan tidak null.
+        mengembalikan pesan "Email is already taken".
+
+StoryListViewModelTest
+
+    ketika mengambil data
+        data tidak null.
+
+
+UploadViewModelTest
+*note pengecekan apakah ada deskripsi / foto sudah ada di ui jadi tidak di test ulang
+
+    ketika upload berhasil
+        menggunakan auth manual
+        mengembalikan pesan "Story created successfully".
+        data pesan tidak null.
+
+    ketika upload gagal
+        menggunakan auth kosong
+        mengembalikan pesan "Bad HTTP authentication header format".
+        data pesan tidak null.
+
+

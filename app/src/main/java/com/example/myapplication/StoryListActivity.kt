@@ -90,7 +90,6 @@ class StoryListActivity : AppCompatActivity() {
         )
 
         model.storyItem.observe(this) {pagingData->
-            Log.d("TAG", "getData: observed")
             adapter.submitData(lifecycle, pagingData)
 
         }

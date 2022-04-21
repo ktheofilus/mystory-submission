@@ -50,10 +50,6 @@ class UploadViewModel  @Inject constructor(
 
     fun upload(file: File,desc:String,lat:Double?,lon:Double?) {
 
-        _isUploaded.value=false
-
-        Log.d("TAG", "upload: ${_isUploaded.value}")
-
         val description = desc.toRequestBody("text/plain".toMediaType())
         val latitude = lat.toString().toRequestBody("text/plain".toMediaType())
         val lonngitude = lon.toString().toRequestBody("text/plain".toMediaType())

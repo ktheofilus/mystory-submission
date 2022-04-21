@@ -44,7 +44,6 @@ class MainViewModel  @Inject constructor(
 
 
     fun login(email:String,password:String){
-        _isLogged.value=false
 
         _isLoading.value=true
         val client = ApiConfig.getApiService().login(Login(email,password))

@@ -1,4 +1,4 @@
-package com.example.myapplication.utils
+package com.example.myapplication
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
@@ -9,7 +9,7 @@ import java.util.concurrent.TimeoutException
 
 @VisibleForTesting(otherwise = VisibleForTesting.NONE)
 fun <T> LiveData<T>.getOrAwaitValue(
-    time: Long = 10,
+    time: Long = 15,
     timeUnit: TimeUnit = TimeUnit.SECONDS,
     afterObserve: () -> Unit = {}
 ): T {
