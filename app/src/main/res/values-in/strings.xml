@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="error_empty" translatable="false">Kolom ini tidak boleh kosong</string>
-    <string name="error_passwordLength" translatable="false">Panjang minimum password adalah 6</string>
+    <string name="error_empty">Kolom ini tidak boleh kosong</string>
+    <string name="error_passwordLength">Panjang minimum password adalah 6</string>
 
 
-    <string name="app_name" translatable="false">My Story</string>
-    <string name="email" translatable="false">E-mail</string>
-    <string name="password" translatable="false">Kata Sandi</string>
-    <string name="login" translatable="false">Masuk</string>
-    <string name="register" translatable="false">Daftar</string>
-    <string name="name" translatable="false">Nama</string>
-    <string name="photodesc" translatable="false">Deskripsi</string>
-    <string name="photoname" translatable="false">
+    <string name="app_name">My Story</string>
+    <string name="email">E-mail</string>
+    <string name="password">Kata Sandi</string>
+    <string name="login">Masuk</string>
+    <string name="register">Daftar</string>
+    <string name="name">Nama</string>
+    <string name="photodesc">Deskripsi</string>
+    <string name="photoname">
         <b>Nama</b>
     </string>
     <string name="logout">Keluar</string>

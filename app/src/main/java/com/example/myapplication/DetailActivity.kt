@@ -24,8 +24,8 @@ class DetailActivity : AppCompatActivity() {
 
 
     private fun setupData() {
-        val story = intent.getParcelableExtra<ListStoryItem>("story") as ListStoryItem?
-        val storyLoc = intent.getParcelableExtra<ListStoryItemLocation>("storyLoc") as ListStoryItemLocation?
+        val story = intent.getParcelableExtra<ListStoryItem>("story")
+        val storyLoc = intent.getParcelableExtra<ListStoryItemLocation>("storyLoc")
         if (story!=null){
             Glide.with(applicationContext)
                 .load(story.photoUrl)

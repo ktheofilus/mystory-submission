@@ -1,13 +1,7 @@
 package com.example.myapplication.api
 
-import android.util.Log
 import com.example.myapplication.BuildConfig.DICODING_ENDPOINT
-import com.example.myapplication.api.ApiConfig.baseUrl
-import okhttp3.HttpUrl
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

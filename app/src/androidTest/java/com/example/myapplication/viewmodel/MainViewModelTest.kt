@@ -10,7 +10,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
@@ -64,12 +63,12 @@ class MainViewModelTest{
     }
 
     protected fun email(): String? {
-        val SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        val saltchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
         val salt = StringBuilder()
         val rnd = Random()
         while (salt.length < 10) { // length of the random string.
-            val index = (rnd.nextFloat() * SALTCHARS.length).toInt()
-            salt.append(SALTCHARS[index])
+            val index = (rnd.nextFloat() * saltchars.length).toInt()
+            salt.append(saltchars[index])
         }
         return salt.toString()
     }

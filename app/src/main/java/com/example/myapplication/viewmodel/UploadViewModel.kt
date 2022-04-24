@@ -1,7 +1,6 @@
 package com.example.myapplication.viewmodel
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.lifecycle.LiveData

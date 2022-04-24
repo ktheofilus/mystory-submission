@@ -13,7 +13,6 @@ import com.example.myapplication.MainCoroutineRule
 import com.example.myapplication.api.ListStoryItem
 import com.example.myapplication.getOrAwaitValue
 import com.example.myapplication.recyclerview.StoryAdapter
-import com.example.myapplication.repository.StoryDao
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runBlockingTest

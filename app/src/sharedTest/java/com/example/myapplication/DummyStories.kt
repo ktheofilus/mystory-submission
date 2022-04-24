@@ -1,7 +1,6 @@
 package com.example.myapplication
 
 import com.example.myapplication.api.ListStoryItem
-import com.example.myapplication.api.ListStoryResponse
 
 object DataDummy {
 
